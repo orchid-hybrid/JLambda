@@ -1,0 +1,23 @@
+.assembly Hello {}
+.assembly extern mscorlib {}
+.method static void Main()
+{
+    .entrypoint
+    .maxstack 1
+    call int32 go()
+    call void [mscorlib]System.Console::WriteLine(int32)
+    ret
+}
+.method static int32 go()
+{
+ldc.i4 1
+ldc.i4 2
+ldc.i4 3
+ldc.i4 4
+ldc.i4 5
+add
+add
+add
+add
+ret
+}

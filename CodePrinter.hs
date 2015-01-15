@@ -11,6 +11,14 @@ toJava HALT = JNew "HaltNode" []
 toJava (PUSH i c) = JNew "PushNode" [JInt i, toJava c]
 toJava (ADD c) = JNew "AddNode" [toJava c]
 
+cccJava HALT = JNew "HaltNode" []
+cccJava (PUSH i c) = JNew "PushNode" [JInt i, cccJava c]
+cccJava (ADD c) = JNew "AddNode" [cccJava c]
+cccJava (LOOKUP i c) = JNew "LookupNode" [JInt i, cccJava c]
+cccJava (ABS c c') = JNew "AbsNode" [cccJava c, cccJava c']
+cccJava RET = JNew "RetNode" []
+cccJava (APP c) = JNew "AppNode" [cccJava c]
+
 {-
 
 *Main Data.List> putStrLn . java . toJava . comp $ t1

@@ -1,3 +1,9 @@
+module HuttonsRazor (
+ Code(..),
+ comp,
+ t1, t2, t3, t4, t5
+ ) where
+
 data Expr
  = Val Int
  | Add Expr Expr

@@ -1,5 +1,6 @@
 module CCC (
- Expr(..)
+ Expr(..),
+ Code(..)
  ) where
 
 -- Code from http://www.cs.nott.ac.uk/~gmh/ccc.pdf
