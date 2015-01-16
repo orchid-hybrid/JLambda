@@ -37,3 +37,6 @@ t2 = Add (Val 1) (Val 1)
 t3 = Add (Add (Add (Add (Val 1) (Val 2)) (Val 3)) (Val 4)) (Val 5)
 t4 = Add (Val 1) (Add (Val 2) (Add (Val 3) (Add (Val 4) (Val 5))))
 t5 = Add (Add (Val 5) (Val (-7))) (Add (Val (-5)) (Val 7))
+
+--
+
