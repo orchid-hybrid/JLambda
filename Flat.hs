@@ -50,7 +50,7 @@ flat (C.APP c) = do emit APP ; flat c
 ---
 
 assemble _ [] = []
-assemble i (LABEL l:cs) = (l,i) : assemble (i+1) cs
+assemble i (LABEL l:cs) = (l,i) : assemble i cs
 assemble i (_:cs) = assemble (i+1) cs
 
 assemble' cod = map go . filter notLabel $ cod
