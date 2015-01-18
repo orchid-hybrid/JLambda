@@ -56,7 +56,7 @@ flat (C.APP c) = do emit APP ; flat c
 
 assemble _ [] = []
 assemble i (LABEL l:cs) = (l,i) : assemble i cs
-assemble i (_:cs) = assemble (i+1) cs
+assemble i (c:cs) = assemble (i + (length . encode_instr $ c)) cs
 
 assemble' cod = map go . filter notLabel $ cod
  where labels = assemble 0 cod
