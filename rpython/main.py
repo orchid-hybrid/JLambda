@@ -14,12 +14,12 @@ def from_endian_big(a,b,c,d):
 def program_words(b):
     s = int(len(b)/4)
     a = [r_uint32(0)] * s
-    for i in range(0, s): #xrange?
+    for i in xrange(0, s): #xrange?
         a[i] = r_uint32(from_endian_little(ord(b[4*i+0]),
                                            ord(b[4*i+1]),
                                            ord(b[4*i+2]),
                                            ord(b[4*i+3])))
-        return a
+    return a
 
 class Value:
     def __init__(self, value):
@@ -44,16 +44,12 @@ def mainloop(program):
     e = [] # argument stack
     while True:
         op = intmask(program[pc])
-        
         if op == 0: # HALT
-            print "HALT"
             return [s, e]
         elif op == 1: # PUSH
-            print "PUSH "+str(program[pc+1])
             s.append(Num(intmask(program[pc+1])))
             pc += 2
         elif op == 2: # ADD
-            print "ADD"
             s.append(Num(s.pop().n + s.pop().n))
             pc += 1
         elif op == 3: # LOOKUP
@@ -87,6 +83,7 @@ def run(fp):
             break
         program_code += read
     os.close(fp)
+    #print( ":".join(['%0X' % ord(b) for b in program_code]))
     program = program_words(program_code)
     print(mainloop(program))
 
