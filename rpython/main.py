@@ -29,10 +29,14 @@ class Closure(Value):
     def __init__(self, code, env):
         self.code = code
         self.env = env
+    def __repr__(self):
+        return "clo<" + str(self.code) + ">"
 
 class Num(Value):
-    def __init(self, n):
+    def __init__(self, n):
         self.n = n
+    def __repr__(self):
+        return str(self.n)
 
 def mainloop(program):
     pc = 0
@@ -42,31 +46,34 @@ def mainloop(program):
         op = intmask(program[pc])
         
         if op == 0: # HALT
+            print "HALT"
             return [s, e]
         elif op == 1: # PUSH
-            s.push(Num(intmask(program[pc+1])))
+            print "PUSH "+str(program[pc+1])
+            s.append(Num(intmask(program[pc+1])))
             pc += 2
         elif op == 2: # ADD
-            s.push(Num(s.pop().n + s.pop().n))
+            print "ADD"
+            s.append(Num(s.pop().n + s.pop().n))
             pc += 1
         elif op == 3: # LOOKUP
             e[intmask(program[pc+1])]
             pc += 2
         elif op == 4: # ABS
-            s.push(Closure(program[pc+1], e))
+            s.append(Closure(program[pc+1], e))
             pc += 2
         elif op == 5: # RET
             v = s.pop()
             k = s.pop()
-            s.push(v)
+            s.append(v)
             e = k.env()
             pc +=1
         elif op == 6: # APP i need to make a closure here
             v = s.pop()
             c = s.pop()
-            s.push(Closure(pc+1, e))
+            s.append(Closure(pc+1, e))
             e = c.env
-            e.push(v)
+            e.append(v)
             pc = c.code
         else:
             assert False
