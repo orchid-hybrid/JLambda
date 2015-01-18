@@ -70,6 +70,18 @@ exec RET (VAL v : CLO c e : s, _)
 exec (APP c) (VAL v : VAL (Clo' c' e') : s, e)
                          = exec c' (CLO c e : s, v : e')
 
+
+execTrace HALT (s, e)         = ["halt"]
+execTrace (PUSH n c) (s, e)   = "push" : execTrace c (VAL (Num' n) : s, e)
+execTrace (ADD c) (VAL (Num' m) : VAL (Num' n) : s, e)
+                         = "add" : execTrace c (VAL (Num' (n + m)) : s, e)
+execTrace (LOOKUP i c) (s, e) = "lookup" : execTrace c (VAL (e !! i) : s, e)
+execTrace (ABS c' c) (s, e)   = "abs" : execTrace c (VAL (Clo' c' e) : s, e)
+execTrace RET (VAL v : CLO c e : s, _)
+                         = "ret" : execTrace c (VAL v : s, e)
+execTrace (APP c) (VAL v : VAL (Clo' c' e') : s, e)
+                         = "app" : execTrace c' (CLO c e : s, v : e')
+
 conv          :: Value -> Value'
 conv (Num n)   = Num' n
 conv (Clo x e) = Clo' (comp' x RET) (map conv e)
