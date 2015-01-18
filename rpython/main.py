@@ -53,16 +53,16 @@ def mainloop(program):
             s.append(Num(s.pop().n + s.pop().n))
             pc += 1
         elif op == 3: # LOOKUP
-            e[intmask(program[pc+1])]
+            s.append(e[intmask(program[pc+1])])
             pc += 2
         elif op == 4: # ABS
-            s.append(Closure(program[pc+1], e))
+            s.append(Closure(intmask(program[pc+1]), e))
             pc += 2
         elif op == 5: # RET
             v = s.pop()
             k = s.pop()
             s.append(v)
-            e = k.env()
+            e = k.env
             pc +=1
         elif op == 6: # APP i need to make a closure here
             v = s.pop()
