@@ -59,18 +59,18 @@ def mainloop(program):
             s.append(Closure(intmask(program[pc+1]), e))
             pc += 2
         elif op == 5: # RET
-            v = s.pop()
-            k = s.pop()
-            s.append(v)
-            e = k.env
-            pc +=1
-        elif op == 6: # APP i need to make a closure here
-            v = s.pop()
-            c = s.pop()
-            s.append(Closure(pc+1, e))
-            e = c.env
-            e.append(v)
-            pc = c.code
+            v = s.pop() # pop return value
+            k = s.pop() # pop continuation
+            s.append(v) # push return value
+            e = list(k.env) # set contination environment
+            pc = k.code # enter continuation
+        elif op == 6: # APP
+            v = s.pop() # get the value being applied
+            c = s.pop() # get the closure being applied
+            s.append(Closure(pc+1, e)) # push a closure for the continuation
+            e = list(c.env) # set the environment to the closure environment
+            e.append(v) # append the argument to the environment
+            pc = c.code # set the program counter inside the closure body
         else:
             assert False
 
