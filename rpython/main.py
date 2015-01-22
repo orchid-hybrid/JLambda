@@ -1,6 +1,9 @@
 import os
 import sys
 from rpython.rlib.rarithmetic import r_uint32, intmask
+from rpython.rlib.jit import JitDriver
+jitdriver = JitDriver(greens=['pc'],
+                      reds=['s', 'e'])
 
 # _______ ENtry Ppoint ________-
 
@@ -42,36 +45,31 @@ def mainloop(program):
     pc = 0
     s = [] # return stack
     e = [] # argument stack
-    while True:
+    while True: 
+        jitdriver.jit_merge_point(pc=pc,
+                                  s=s, e=e)
         op = intmask(program[pc])
         if op == 0: # HALT
-            print "HALT"
             return [s, e]
         elif op == 1: # PUSH
-            print "PUSH"
             s.append(Num(intmask(program[pc+1])))
             pc += 2
         elif op == 2: # ADD
-            print "ADD"
             s.append(Num(s.pop().n + s.pop().n))
             pc += 1
         elif op == 3: # LOOKUP
-            print "LOOKUP"
             s.append(e[len(e)-intmask(program[pc+1])-1])
             pc += 2
         elif op == 4: # ABS
-            print "ABS"
             s.append(Closure(intmask(program[pc+1]), e))
             pc += 2
         elif op == 5: # RET
-            print "RET"
             v = s.pop() # pop return value
             k = s.pop() # pop continuation
             s.append(v) # push return value
             e = list(k.env) # set contination environment
             pc = k.code # enter continuation
         elif op == 6: # APP
-            print "APP"
             v = s.pop() # get the value being applied
             c = s.pop() # get the closure being applied
             s.append(Closure(pc+1, e)) # push a closure for the continuation
@@ -92,7 +90,7 @@ def run(fp):
     os.close(fp)
     #print( ":".join(['%0X' % ord(b) for b in program_code]))
     program = program_words(program_code)
-    print(mainloop(program))
+    print([x.__repr__() for x in mainloop(program)[0]])
 
 def entry_point(argv):
     try:
